@@ -31,6 +31,5 @@ If you find a **better approach**, let's discuss and improve together. 🚀
 ---
 
 ## 🔗 Useful Links  
-- **LeetCode Profile:** [Add Link Here]  
-- **GitHub Repository:** [Add Link Here]  
-- **GFG Profile:** [Add Link Here]  
+ 
+- **GFG Profile:** [[Click here](https://github.com/Triptigithub/Leetcode-DSA/tree/main)]  
