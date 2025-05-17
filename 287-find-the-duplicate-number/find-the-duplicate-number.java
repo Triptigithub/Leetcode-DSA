@@ -1,17 +1,29 @@
 class Solution {
     public int findDuplicate(int[] nums) {
-        //my initial approach by my own is to do sort and check adjacent
-        Arrays.sort(nums);
-        int n = nums.length;
-        int one=nums[0];
-        for(int i=1;i<n;i++){
-            if(one == nums[i]){
-                return nums[i];
-            }else{
-                one = nums[i];
-            }
+        int slow = nums[0];
+        int fast = nums[0];
+
+
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+
+
+
+//find intersection
+        while(slow!=fast){
+            slow = nums[slow];
+            fast = nums[nums[fast]];
 
         }
-  return 0;
+
+//move one to start
+            slow = nums[0];
+            while(slow!=fast){
+                slow = nums[slow];
+                fast = nums[fast];
+            }
+
+return slow;
+    
     }
 }
