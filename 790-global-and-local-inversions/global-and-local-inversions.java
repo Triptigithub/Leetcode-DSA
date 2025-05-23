@@ -1,6 +1,9 @@
+//instead of using global variable used 
+//int global inside the function
 class Solution {
-      int global;
-    public void combine(int low,int mid,int high,int[] arr){
+    
+    public int combine(int low,int mid,int high,int[] arr){
+        int global=0;
       ArrayList<Integer> temp = new ArrayList<>(); // temporary array
         int left = low;      // starting index of left half of arr
         int right = mid + 1;   // starting index of right half of arr
@@ -35,15 +38,17 @@ class Solution {
         for (int i = low; i <= high; i++) {
             arr[i] = temp.get(i - low);
         }
-    
+    return global;
         
     }
-    public void merge(int[] arr,int left,int right){
-        if(left>=right)return;
+    public int merge(int[] arr,int left,int right){
+        int global =0;
+        if(left>=right)return global;
         int mid = (left+right)/2;
-        merge(arr,left,mid);
-        merge(arr,mid+1,right);
-        combine(left,mid,right,arr);
+        global+=merge(arr,left,mid);
+        global+=merge(arr,mid+1,right);
+        global+=combine(left,mid,right,arr);
+        return global;
         
     }
     public boolean isIdealPermutation(int[] arr) {
@@ -52,8 +57,7 @@ class Solution {
         for(int i=0; i<n; i++){
             if(arr[i]>arr[i+1])local++;
         }
-        global =0; 
-        merge(arr,0,n);
-        return global == local;
+     
+        return merge(arr,0,n) == local;
     }
 }
