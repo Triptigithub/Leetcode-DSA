@@ -11,9 +11,8 @@ class Solution {
         int curnum = nums[0];
         int cnt=1;
         for(int i=1;i<n;i++){
-             if(nums[i] == curnum){
-                continue;
-             }else if (nums[i] == curnum+1 ){
+
+              if(nums[i] == curnum+1 ){
                 cnt++;
                 curnum = nums[i];
                 ans = Math.max(ans,cnt);
@@ -21,6 +20,7 @@ class Solution {
                 curnum = nums[i];
                 cnt = 1;
              }
+
         }
         return ans;
     }
