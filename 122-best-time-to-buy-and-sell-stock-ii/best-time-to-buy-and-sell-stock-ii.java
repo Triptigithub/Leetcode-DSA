@@ -1,33 +1,37 @@
 class Solution {
-    public int solver(int i , int buy , int[] arr, int n, int[][] dp){
+    public int maxProfit(int[] prices) {
         //buy = 1 (we can buy stock if we want to we are not holding  any stock)
         //buy = 0 (we prev has buyed one stock we need to sell that before buy any more)
-        if(i == n)return 0;
-        int profit = 0;
 
-        if(dp[i][buy] != -1)return dp[i][buy];
-        if(buy == 1){
-            //profit = max(you buy + you did not buy)
-            profit = Math.max( -arr[i]+solver(i+1,0,arr,n,dp),
-                                     0+solver(i+1,1,arr,n,dp));
-        }else{
-            //profit = max(you sell stock, you didnot sell stk)
-            profit = Math.max( arr[i]+solver(i+1,1,arr,n,dp),
-                                    0+solver(i+1,0,arr,n,dp));
-        }
-
-        return dp[i][buy] = profit;
-    }
-    public int maxProfit(int[] prices) {
         int n = prices.length;
-        int[][] dp = new int[n][2];
-        for(int i= 0; i<n ; i++){
-            for(int j=0; j<2; j++){
-                dp[i][j] = -1;
+        int profit = 0;
+        int[][] dp = new int[n + 1][2];
+        // for(int i= 0; i<n+1 ; i++){
+        //     for(int j=0; j<2; j++){
+        //         dp[i][j] = -1;
+        //     }
+        // }
+
+        dp[n][0] = 0;
+        dp[n][1] = 0;
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int buy = 1; buy >= 0; buy--) {
+                profit = 0;
+                if (buy == 1) {
+                    //profit = max(you buy + you did not buy)
+                    profit = Math.max(-prices[i] + dp[i + 1][0],
+                            0 + dp[i + 1][1]);
+                } else {
+                    //profit = max(you sell stock, you didnot sell stk)
+                    profit = Math.max(prices[i] + dp[i + 1][1],
+                            0 + dp[i + 1][0]);
+                }
+                dp[i][buy] = profit;
             }
         }
 
-        return solver(0,1,prices,n,dp); 
-        //checking how much profit we can make if we start from index 0 when buy state is 1 i.e currently we are not holding nay stk
+        return dp[0][1];
+
     }
 }
