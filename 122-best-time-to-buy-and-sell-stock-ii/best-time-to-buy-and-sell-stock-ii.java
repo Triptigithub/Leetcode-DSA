@@ -8,14 +8,16 @@ class Solution {
         //here we just declare that variable only at last switching them to compute next values
 
         int n = prices.length;
-        int profit = 0;
-        int[] frontarr = new int[2];
-        int[] curarr = new int[2];
+        int profit =0;
+        
+        int frontzero = 0;
+        int frontone =0;
 
-        frontarr[0] = 0;
-        frontarr[1] = 0;
+//base case
+        int backzero =0;
+        int backone=0;
 
-        //base case
+        
         
 
         for (int i = n - 1; i >= 0; i--) {
@@ -23,22 +25,24 @@ class Solution {
                 profit = 0;
                 if (buy == 1) {
                     //profit = max(you buy + you did not buy)
-                    profit = Math.max(-prices[i] + frontarr[0],
-                            0 + frontarr[1]);
+                    profit = Math.max(-prices[i] + frontzero,
+                            0 + frontone);
+                    backone = profit;
                 } else {
                     //profit = max(you sell stock, you didnot sell stk)
-                    profit = Math.max(prices[i] + frontarr[1],
-                            0 + frontarr[0]);
+                    profit = Math.max(prices[i] + frontone,
+                            0 + frontzero);
+                    backzero = profit;
                 }
-                curarr[buy] = profit;
+                
             }
 
-            //switching
-            frontarr = curarr;
+            frontzero = backzero;
+               frontone  = backone; 
 
         }
 
-        return frontarr[1];
+        return frontone;
       
 
     }
