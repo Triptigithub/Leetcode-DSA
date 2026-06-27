@@ -12,6 +12,8 @@ class Solution {
         //     }
         // }
 
+
+        //base case
         dp[n][0] = 0;
         dp[n][1] = 0;
 
@@ -32,6 +34,10 @@ class Solution {
         }
 
         return dp[0][1];
+        //we return dp[0][1] because this is the state where we start solving problem 
+        //it says we are starting at idx 0 and buy state is 1 means we can buy stk if we want
+        //we cannot return dp[0][0] as ans becasue it sasys we are at index 0 and currently you can sell stk but you didnot buy stk how you are selling
+        //we are able to return dp[0][1] -> bcz this is tabulation we filled ans in reverse frrom base case
 
     }
 }
