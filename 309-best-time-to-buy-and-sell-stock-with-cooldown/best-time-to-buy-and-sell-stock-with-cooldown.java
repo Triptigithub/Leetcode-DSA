@@ -6,24 +6,13 @@ class Solution {
 
         int n = prices.length;
 
-        int[][] dp = new int[n + 2][2]; //see we are making array of n+2 this time to avoid out of bound 
-        
+        int[] ahead = new int[2];
+        int[] mid = new int[2];
+        int[] cur = new int[2];
 
-        /**
-         if (i >= n)
-            return 0;
-        //here prev ques also we were only doing dp[n][0] = dp[n][1] = 0 
-        //but here we are doing for n+1 as well becasue 
-        //in case of sell -> buy = 0 = max(sell+not sell)  -> so in case of sell we are saying to go and check i+2
-        //lets say i = 4 so i+2 = 6 so we need to have this 6 th index as well indp array to avoid out of bound error
-        */
-        dp[n+1][0] = 0;
-        dp[n+1][1] = 0;
-        dp[n][0] = 0;
-        dp[n][1] = 0;
-
-    
-
+        //here change dp[i+1] -> mid
+        //dp[i] = cur
+        //dp[i+2] = ahead
 
         //in memo we were going from i = 0 to n
         //buy = 1 to 2 can be naything this time
@@ -35,8 +24,8 @@ class Solution {
                 if (buy == 1) {
                     //deciding buy
                     //profit = max(you buy +you not buy)
-                    profit = Math.max(-prices[i] + dp[i + 1][0],
-                            0 + dp[i + 1][1]);
+                    profit = Math.max(-prices[i] + mid[0],
+                            0 + mid[1]);
                 } else {
                     //deciding sell
                     //profit = max(sell,not sell)
@@ -45,16 +34,33 @@ class Solution {
                     //so we just do i+2 we skip one index and then allowed to buy i.e (i+2,1) -> on next to next day you are allowed ot buy 
 
                     //                      <----- crucial part ---> doing i+2
-                    profit = Math.max(prices[i] + dp[i + 2][1],
-                            0 + dp[i + 1][0]);
+                    profit = Math.max(prices[i] + ahead[1],
+                            0 + mid[0]);
                 }
 
-                dp[i][buy] = profit;
+                cur[buy] = profit;
             }
-        }
+            //now do swapping
+            int[] temp = ahead;
+            //========
+            //cur become mid and mid become ahead
+            ahead = mid; //jo phle mid tha usse ahead bna do
+            mid = cur; //jo phle cur tha usse mid bna do
+            //=========
+            //here if you see currently ahead is pinting to older mid
+            //mid is pointing to older cur
+            //but cur is still pointing to mid wala array only like we didnot change cuur as odf now
+            //so we should remove cur pointer from here
+            //1.approach do here cur = new int[2]; make new cur array every iternation
+            //2.that we used her
+            //           -> ahead array that we were using initially is of no use reuse that
+            //           -> initially he save like int[] temp = ahead;
+            //           -> and at last we do after swapping cur = temp
+            //here as we are rewriting cur value in every iteration so phle kuch bhi values aye from ahead arr we dont caaaare
+            cur = temp;
 
-        //we have infinite transaction we can buy ans sell as much time as we want
-        //i,buy,prices arr ,arr lengtth
-        return dp[0][1];
+        }
+        //because we are swapping final ans lies in mid[1]
+        return mid[1];
     }
 }
