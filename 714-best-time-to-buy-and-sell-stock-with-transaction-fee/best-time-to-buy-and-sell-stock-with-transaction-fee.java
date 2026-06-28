@@ -5,11 +5,13 @@ class Solution {
         //buy = 0 we are holding stk sell it first
 
         int n = prices.length;
-        int[][] dp = new int[n+1][2];
+        int[] ahead = new int[2];
+        int[] cur = new int[2];
 
         //  if (i == n)return 0;
-         dp[n][0] = 0;
-         dp[n][1] = 0;
+        ahead[0] = 0;
+        ahead[1] = 0;
+
         
         for(int i = n-1 ; i>=0 ; i--){
             for (int buy = 0; buy < 2; buy++){
@@ -17,22 +19,26 @@ class Solution {
                 if(buy == 1){
                    //deciding buy
                    //profit = max(you buy +you not buy)
-                   profit = Math.max(-prices[i]+dp[i+1][0],
-                                        0 + dp[i+1][1]); 
+                   profit = Math.max(-prices[i]+ahead[0],
+                                        0 + ahead[1]); 
                 }else{
                     //deciding sell
                     //profit = max(sell,not sell)
                     //here in sell case --> when you are complete one transaction you need to subtract the fee from profit
-                    profit = Math.max(-fee + prices[i]+dp[i+1][1],
-                                     0+dp[i+1][0]);
+                    profit = Math.max(-fee + prices[i]+ahead[1],
+                                     0+ahead[0]);
                 }
-
-              dp[i][buy] = profit;
+              
+              cur[buy] = profit;
             }
+            //here we reused the same old ahead arr becasue once you do ahead  =curr now old ahead array is of no use so you can use that same arras curr arr instead of creating new 
+            int[] temp = ahead;
+            ahead = cur;
+            cur = ahead;
         }
         
         //we have infinite transaction we can buy ans sell as much time as we want
         //i,buy,prices arr ,arr lengtth,fee,dp
-        return dp[0][1];
+        return ahead[1];
     }
 }
