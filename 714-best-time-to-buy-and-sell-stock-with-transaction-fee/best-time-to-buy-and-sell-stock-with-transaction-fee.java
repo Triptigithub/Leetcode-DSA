@@ -34,7 +34,7 @@ class Solution {
             //here we reused the same old ahead arr becasue once you do ahead  =curr now old ahead array is of no use so you can use that same arras curr arr instead of creating new 
             int[] temp = ahead;
             ahead = cur;
-            cur = ahead;
+            cur = temp;
         }
         
         //we have infinite transaction we can buy ans sell as much time as we want
