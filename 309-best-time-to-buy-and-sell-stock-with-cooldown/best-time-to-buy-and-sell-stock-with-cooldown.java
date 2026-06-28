@@ -1,28 +1,4 @@
 class Solution {
-    public int solver(int i, int buy, int[] prices, int n,int[][] dp ){
-        if(i>=n)return 0; 
-        //because we are doing i+2 in case of buy = 0 sell so ther may be case we go beyond n also therefore i am saying if i got n or n se aage return profit 0
-        
-        int profit =0;
-        if(dp[i][buy] != -1)return dp[i][buy];
-        if(buy == 1){
-            //deciding buy
-            //profit = max(you buy +you not buy)
-            profit = Math.max(-prices[i]+solver(i+1,0,prices,n,dp),
-                               0 + solver(i+1,1,prices,n,dp)); 
-        }else{
-            //deciding sell
-            //profit = max(sell,not sell)
-            //here in sell case --> prev it was (i+1,1) in case that means in next state or at next index you are allowed to buy again but here you will see
-            //our cooldown clause say after one transaction i.e buy and sell we should not allow to buy on immediate next day
-            //so we just do i+2 we skip one index and then allowed to buy i.e (i+2,1) -> on next to next day you are allowed ot buy 
-            profit = Math.max(prices[i]+solver(i+2,1,prices,n,dp),
-                                     0+ solver(i+1,0,prices,n,dp));
-        }
-
-        return dp[i][buy] = profit;
-
-    }
     public int maxProfit(int[] prices) {
         //so 
         //buy = 1 means we can buy 
@@ -30,13 +6,55 @@ class Solution {
 
         int n = prices.length;
 
-        int[][] dp = new int[n+1][2];
-        for(int i=0; i<n+1; i++){
-            Arrays.fill(dp[i], -1);
+        int[][] dp = new int[n + 2][2]; //see we are making array of n+2 this time to avoid out of bound 
+        
+
+        /**
+         if (i >= n)
+            return 0;
+        //here prev ques also we were only doing dp[n][0] = dp[n][1] = 0 
+        //but here we are doing for n+1 as well becasue 
+        //in case of sell -> buy = 0 = max(sell+not sell)  -> so in case of sell we are saying to go and check i+2
+        //lets say i = 4 so i+2 = 6 so we need to have this 6 th index as well indp array to avoid out of bound error
+        */
+        dp[n+1][0] = 0;
+        dp[n+1][1] = 0;
+        dp[n][0] = 0;
+        dp[n][1] = 0;
+
+    
+
+
+        //in memo we were going from i = 0 to n
+        //buy = 1 to 2 can be naything this time
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int buy = 0; buy < 2; buy++) {
+                int profit = 0;
+
+                if (buy == 1) {
+                    //deciding buy
+                    //profit = max(you buy +you not buy)
+                    profit = Math.max(-prices[i] + dp[i + 1][0],
+                            0 + dp[i + 1][1]);
+                } else {
+                    //deciding sell
+                    //profit = max(sell,not sell)
+                    //here in sell case --> prev it was (i+1,1) in case that means in next state or at next index you are allowed to buy again but here you will see
+                    //our cooldown clause say after one transaction i.e buy and sell we should not allow to buy on immediate next day
+                    //so we just do i+2 we skip one index and then allowed to buy i.e (i+2,1) -> on next to next day you are allowed ot buy 
+
+                    //                      <----- crucial part ---> doing i+2
+                    profit = Math.max(prices[i] + dp[i + 2][1],
+                            0 + dp[i + 1][0]);
+                }
+
+                dp[i][buy] = profit;
+            }
         }
 
         //we have infinite transaction we can buy ans sell as much time as we want
         //i,buy,prices arr ,arr lengtth
-        return solver(0,1,prices,n,dp);
+        return dp[0][1];
     }
 }
